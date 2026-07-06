@@ -1,0 +1,32 @@
+import os
+import asyncio
+
+from aiogram import Bot, Dispatcher
+from aiogram.filters import CommandStart
+from aiogram.types import Message
+from dotenv import load_dotenv
+
+load_dotenv("../api/.env")
+
+bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
+dp = Dispatcher()
+
+
+@dp.message(CommandStart())
+async def start(message: Message):
+    await message.answer(
+        "Bonjour 👋\n\nBienvenue au cabinet.\n\nAvant de commencer, quel est votre nom et prénom ?"
+    )
+
+@dp.message()
+async def receive_name(message: Message):
+    await message.answer(
+        f"Merci {message.text}.\n\nQuel est votre numéro de téléphone ?"
+    )
+
+async def main():
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
